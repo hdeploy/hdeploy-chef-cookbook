@@ -1,6 +1,4 @@
 name 'hdeploy'
-maintainer 'Patrick Viet'
-maintainer_email 'patrick.viet@gmail.com'
-description 'cookbook to install hdeploy'
-version '0.0.1'
+
+depends 'enterprise' if __FILE__.start_with?('/opt/hdeploy') # Trick for this to only happen in the embedded chef
 
