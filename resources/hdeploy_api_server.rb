@@ -14,11 +14,11 @@ require 'uri'
 
 action :create do
   
-  raise "You must define hdeploy_api with name #{new_resource.name}" unless node['hdeploy']['api'].has_key?(new_resource.name)
   u = URI.parse(node['hdeploy']['api'][new_resource.name]['url'])
 
   if u.scheme == 'https'
-    if 
+    #if # Do some SSL stuff?
+  end
 
   raise "API URL format must be http:// or https://" unless u.scheme == 'http' or u.scheme == 'https'
 
@@ -27,4 +27,7 @@ action :create do
     user: new_resource.user,
     pass: new_resource.pass,
   }
+
+  include_recipe 'hdeploy::server'
+
 end
