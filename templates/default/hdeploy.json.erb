@@ -1,0 +1,31 @@
+<%
+
+# This creates a default API resource if needed
+if (node['hdeploy']['api'].count == 0 and
+
+)
+  node['hdeploy']['api']['default'] = {
+    host: 'http://127.0.0.1:8501',
+    user: 'default_hdeploy_user', # This will only listen to localhost so
+    pass: 'default_hdeploy_pass', # a default user/pass is not too bad
+  }
+end
+
+# This creates a default resource IF it is needed by some build clients only
+if (node['hdeploy']['repository'].count == 0 and
+    Dir.exists?('/opt/hdeploy-server') and
+    node['hdeploy'].has_key?('build') and
+    node['hdeploy']['build'].select{|k,v| v['artifact_repo'] == 'default' }.count > 0
+)
+  node['hdeploy']['repository'] = {
+    type: 'local',
+    host: 'http://127.0.0.1:8502',
+    path: '/var/lib/hdeploy/artifact_repository',
+  }
+end
+
+%>
+<%= JSON.pretty_generate({
+  api:        node['hdeploy']['api'].to_hash,
+  repository: node['hdeploy']['repository'].to_hash,
+}) %>
