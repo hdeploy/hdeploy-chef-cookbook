@@ -1,12 +1,18 @@
 #FIXME: install server package
+directory "/opt/hdeploy-server" do
+  mode '0755'
+  owner 'root'
+  group 'root'
+end
 
-template '/opt/hdeploy-server/hdeploy.json' do
+template '/opt/hdeploy-server/hdeploy-server.json' do
   mode '0644'
   owner 'root'
   group 'root'
-  notifies :execute, 'execute[/opt/hdeploy-server/bin/hdeploy-ctl reconfigure]'
+  notifies :run, 'execute[hdeploy-server-ctl reconfigure]'
 end
 
-execute '/opt/hdeploy-server/bin/hdeploy-ctl reconfigure' do
+execute 'hdeploy-server-ctl reconfigure' do
+  command '/opt/hdeploy-server/bin/hdeploy-server-ctl reconfigure'
   action :nothing
 end

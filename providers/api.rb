@@ -1,15 +1,15 @@
-resource_name :hdeploy_api
-
-property :url,  kind_of: String, required: true
-property :user, kind_of: String, required: true
-property :pass, kind_of: String, required: true
-
-default_action :create
+# Made this old style rather than new style because this way
+# is it compatible with chef 11 and also early versions of chef 12.
 
 require 'uri'
 
+def whyrun_supported?
+  true
+end
+
+use_inline_resources
+
 action :create do
-  
   u = URI.parse(new_resource.url)
   raise "API URL format must be http:// or https://" unless u.scheme == 'http' or u.scheme == 'https'
 
