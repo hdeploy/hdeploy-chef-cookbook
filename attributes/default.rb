@@ -23,3 +23,5 @@ default['hdeploy-server']['nginx']['log_directory'] = '/var/log/hdeploy/nginx/ou
 default['hdeploy-server']['nginx']['log_rotation']['file_maxbytes'] = 104857600
 default['hdeploy-server']['nginx']['log_rotation']['num_to_keep'] = 10
 
+default['hdeploy-server']['nginx']['worker_connections'] = 1024
+default['hdeploy-server']['nginx']['worker_processes'] = (node['cpu']['cores'] > 4) ? 4 : node['cpu']['cores']

@@ -3,7 +3,7 @@
 # This creates a default API resource if needed
 if !node['hdeploy']['api'] or node['hdeploy']['api'].count == 0
   node.default['hdeploy']['api']['default'] = {
-    host: 'http://127.0.0.1:8501',
+    url:  'http://127.0.0.1:8501',
     user: 'default_hdeploy_user', # This will only listen to localhost so
     pass: 'default_hdeploy_pass', # a default user/pass is not too bad
   }

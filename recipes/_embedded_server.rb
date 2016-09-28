@@ -7,7 +7,7 @@ conffile = '/opt/hdeploy-server/hdeploy-server.json'
 # FIXME: rescue with nice messages? Anyway this is pretty obvious:
 # if there's an error here, we are ready the config file and it messed up ...
 confraw = File.read conffile
-sconf = FFI_Yajl::Parse.parse(confraw)
+sconf = FFI_Yajl::Parser.parse(confraw)
 
 # Two parts of the config are interesting to us: api and repository
 # They both configure NGINX
@@ -47,6 +47,20 @@ directory File.join(node['hdeploy-server']['nginx']['log_directory'], 'output') 
   mode '0700'
   recursive true
   only_if { vhost_count > 0 }
+end
+
+directory '/opt/hdeploy-server/etc' do
+  owner 'root'
+  group 'root'
+  mode '0700'
+end
+
+template '/opt/hdeploy-server/etc/nginx.conf' do
+  owner 'root'
+  group 'root'
+  mode '0600'
+  variables sconf: sconf
+  notifies :restart, 'runit_service[nginx]'
 end
 
 # This nginx component includes api and repository

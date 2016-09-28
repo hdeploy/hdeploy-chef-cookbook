@@ -1,5 +1,6 @@
 #!/bin/sh
 
 exec 2>&1
-exec /opt/hdeploy-server/embedded/sbin/nginx
+exec /opt/hdeploy-server/embedded/sbin/nginx -c /opt/hdeploy-server/etc/nginx.conf
+
 
