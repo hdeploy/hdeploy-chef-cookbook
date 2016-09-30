@@ -19,7 +19,7 @@ action :install do
 
   # Run if the command returned an error = the package isn't already there
   if not $?.success?
-    converge_by "download and install cassandra from github" do
+    converge_by "download and install package #{new_resource.name} from github" do
 
       pkgfile_full = ::File.join(Chef::Config[:file_cache_path], pkgfile)
 
