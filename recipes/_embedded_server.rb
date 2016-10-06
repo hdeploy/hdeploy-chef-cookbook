@@ -6,8 +6,27 @@ conffile = '/opt/hdeploy-server/hdeploy-server.json'
 
 # FIXME: rescue with nice messages? Anyway this is pretty obvious:
 # if there's an error here, we are ready the config file and it messed up ...
-confraw = File.read conffile
-sconf = FFI_Yajl::Parser.parse(confraw)
+if File.exists? conffile
+  confraw = File.read conffile
+  sconf = FFI_Yajl::Parser.parse(confraw)
+else
+  # Default config - makes startup easy
+  sconf = {
+    'api' => {
+      'chef_default' => {
+        'url' => 'http://localhost:8501',
+        'user' => 'chefuser',
+        'pass' => 'chefpass',
+      }
+    }
+  }
+  file conffile do
+    owner 'root'
+    group 'root'
+    mode '0644' #FIXME: owner hdeploy?
+    content JSON.pretty_generate(sconf)
+  end
+end
 
 # Two parts of the config are interesting to us: api and repository
 # They both configure NGINX
