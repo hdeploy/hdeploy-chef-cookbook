@@ -31,22 +31,11 @@ end
 
 node.default['enterprise']['name'] = 'hdeploy-server' # this is the magic!!
 
-include_recipe 'enterprise::runit'
-
 directory node['hdeploy-server']['nginx']['log_directory'] do
   owner 'root'
   group 'root'
   mode '0700'
   recursive true
-  only_if { vhost_count > 0 }
-end
-
-directory File.join(node['hdeploy-server']['nginx']['log_directory'], 'output') do
-  owner 'root'
-  group 'root'
-  mode '0700'
-  recursive true
-  only_if { vhost_count > 0 }
 end
 
 directory '/opt/hdeploy-server/etc' do
@@ -62,6 +51,8 @@ template '/opt/hdeploy-server/etc/nginx.conf' do
   variables sconf: sconf
   notifies :restart, 'runit_service[nginx]'
 end
+
+include_recipe 'enterprise::runit'
 
 # This nginx component includes api and repository
 # FIXME: support other types of repositories...
